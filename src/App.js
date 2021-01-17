@@ -1,24 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import { Route, BrowserRouter as Router } from "react-router-dom";
+import UserCard from "./components/UserCard";
+import "./App.css";
+import useFetchdata from "./Hooks/useFetchdata";
+
+import "bootstrap/dist/css/bootstrap.min.css";
+import UserDetails from "./components/UserDetails";
+import ErrorCard from "./components/Error";
 
 function App() {
+  const { users, error } = useFetchdata();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      {error ? (
+        <ErrorCard error={error} />
+      ) : (
+        <div className="container">
+          <Route exact path="/">
+            <UserCard users={users} />
+          </Route>
+          <Route path="/users/:id">
+            <UserDetails users={users} />
+          </Route>
+        </div>
+      )}
+    </Router>
   );
 }
 
